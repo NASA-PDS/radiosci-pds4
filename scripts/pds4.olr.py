@@ -113,6 +113,9 @@ def main(args):
     # form new logical identifier
     file_base = os.path.basename( args.Input ).split('.')[0]
     lid = Template.read('<logical_identifier>').rsplit(':',1)[0] + ':' + file_base
+
+    # Add DSN station context
+    util.add_dsn_station_context( Template, info.station_id )
     
     # Fill label with information
     Template.replace( '<logical_identifier>', lid )
