@@ -3,6 +3,7 @@ This set of scripts and associated libraries will create labels for Radio Scienc
 * Deep Space Network **TRK-2-34** Tracking and Navigation Data Files [^1] as *Product_Observational*
 * Deep Space Network **TRK-2-23** Media Calibration Data Files [^2] as *Product_Ancillary*
 * Deep Space Network **0222_Science** Open Loop Data Files [^3] as *Product_Observational* (under development, limited functionality)
+* CCSDS **TDM** Tracking Data Message Files as *Product_Observational* (limited to basic radiometric data types: uplink, doppler, ranging, signal power) - this has only been tested on TDMs derived from **TRK-2-34** files.
 * Utility programs for manipulation of other PDS4 files
 
 These utilities are provided to the community by the Planetary Data System Radio Science Sub Node (RSSN) within the Planetary Radar and Radio Sciences Group (332K) at the Jet Propulsion Laboratory, California Institute of Technology.
