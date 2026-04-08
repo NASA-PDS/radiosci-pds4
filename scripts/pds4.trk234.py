@@ -82,6 +82,7 @@ Optional:
    -v, validate the output file using the PDS4 validate software
    -o, keep original TNF file (do not sort the file by SFDU type - NOT RECOMMENDED)
    -q, quick version. okay for very large (>1GB), predictable (single-spacecraft) TNF files
+   --upper, make the naming convention uppercase
 
 """
 
@@ -179,6 +180,12 @@ class Label:
       # Print the TRK 2-34 info to the comments
       self.Template.insert( '<comment>', str(self.trk234_info), 'first' )
 
+      # Add DSN station context
+      stations = list(set(self.trk234_info.uplinkDssId+self.trk234_info.dnlinkDssId))
+      for stn in stations:
+          util.add_dsn_station_context( self.Template, stn )
+
+
       # Determine the number of each SFDU, and modify the label appropriately
       # --- THIS ASSUMES YOU'VE ALREADY REGROUPED THE SFDUs ---
       byte_location = 0
@@ -242,6 +249,8 @@ def main():
                                          dnlink_band='m' if len( label.trk234_info.dnlinkBand )!=1 else label.trk234_info.dnlinkBand[0].lower(),
                                          ul_dss_id='mm' if len( label.trk234_info.uplinkDssId )!=1 else label.trk234_info.uplinkDssId[0],
                                          uplink_band='m' if len( label.trk234_info.uplinkBand )!=1 else label.trk234_info.uplinkBand[0].lower() )
+      if args.uppercase:
+         tnf_new_name = tnf_new_name.upper()
       os.rename( tnf_file, tnf_new_name )
       tnf_file = tnf_new_name
       label.filename = tnf_new_name
@@ -285,6 +294,8 @@ if __name__ == "__main__":
                         help='do not resort the TNF file (not recommended)' )
    parser.add_argument( '-q', '--quick', dest='quick', default=False, action='store_true',
                         help='quick version, makes some assumptions. okay for very large, predictable files')
+   parser.add_argument( '--upper', dest='uppercase', default=False, action='store_true',
+                        help='make naming convetion uppercase' )
 
    # Parse the command line automatically
    args = parser.parse_args()

@@ -99,3 +99,32 @@ def NLtoCRLF(filename,copyfile=False):
    # write file
    with open(filename, 'w') as f:
       f.write(data2) 
+
+# ---------------------------------------------------------------------------
+DSN_CONTEXT = """                   <Observing_System_Component>
+                         <name>DSS-{stn} {size}-m Radio Telescope</name>
+                         <type>Telescope</type>
+                         <Internal_Reference>
+                               <lid_reference>urn:nasa:pds:context:telescope:{complex}.dss{stn}_{size}m</lid_reference>
+                               <reference_type>is_telescope</reference_type>
+                         </Internal_Reference>
+                   </Observing_System_Component>
+"""
+def add_dsn_station_context( Template, station_id ):
+
+    if station_id in [14, 63, 43]:
+        size = 70
+    else:
+        size = 34
+    firstdigit = int(str(station_id)[0])
+    if firstdigit == 1 or firstdigit == 2:
+        cplx = 'goldstone'
+    elif firstdigit == 3 or firstdigit == 4:
+        cplx = 'canberra'
+    elif firstdigit == 5 or firstdigit == 6:
+        cplx = 'madrid'
+    else:
+        print('Unknown complex for station ID %d, manually modify the label' % station_id)
+        cplx = 'UNKNOWN'
+
+    Template.insert('</Observing_System_Component>', DSN_CONTEXT.format(stn=station_id, size=size, complex=cplx), 'last')
